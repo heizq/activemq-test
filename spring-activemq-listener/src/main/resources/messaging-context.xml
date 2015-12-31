@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.2.xsd
+		http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.7.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+        <amq:connectionFactory id="connectionFactory"
+                           brokerURL="tcp://localhost:61616" />
+
+       <amq:queue id="queue" physicalName="person.alert.queue" />
+
+        <amq:topic id="topic" physicalName="person.alert.topic" />
+
+        <bean id="jmsTemplate"
+          class="org.springframework.jms.core.JmsTemplate"
+          c:_-ref="connectionFactory"
+          p:defaultDestinationName="person.alert.queue" />
+
+    <bean id="alertService" class="hei.activemq.alerts.AlertServiceImpl"
+          c:_-ref="jmsTemplate" />
+       <bean id="personHandler"
+             class="hei.activemq.alerts.AlertHandler" />
+
+       <jms:listener-container connection-factory="connectionFactory">
+              <jms:listener destination="person.alert.queue"
+                            ref="personHandler" method="handleMessageAlert" />
+       </jms:listener-container>
+</beans>

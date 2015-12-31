@@ -1,0 +1,37 @@
+description = 'active-mq listener'
+
+group 'activemq-test'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+def springVersion = '4.2.1.RELEASE'
+
+repositories {
+    //oschina maven repository center
+    maven { url 'http://maven.oschina.net/content/groups/public/' }
+    //maven loacl
+    //mavenLocal()
+    //maven center
+    //mavenCentral()
+    //×Ô¶¨Òå
+    //mavenRepo urls: "http://repository.sonatype.org/content/groups/forge/"
+}
+
+dependencies {
+
+    //compile local jar
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.apache.activemq:activemq-all:5.13.0'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+
+}
